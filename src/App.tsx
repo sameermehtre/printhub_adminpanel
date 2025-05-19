@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Sidebar } from "./components/Sidebar";
+import { MainContent } from "./components/MainContent";
+import Header from "./components/Header";
+import { dummyProfile, ProfileData } from "./pages/profile/data/dummyProfile";
 
-function App() {
+const App: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("Dashboard");
+  const [profile, setProfile] = useState<ProfileData>(dummyProfile);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex h-screen bg-[#FFFFFF] overflow-hidden">
+      {/* Sticky sidebar */}
+      <div className="sticky top-0 h-screen z-30">
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
+
+      {/* Main content */}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Sticky header */}
+        <div className="sticky top-0 z-20 bg-white  rounded-xl shadow-md">
+          <Header
+            profile={profile}
+            onProfileClick={() => setActiveTab("Profile")}
+          />
+        </div>
+
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto p-2">
+          <MainContent
+            activeTab={activeTab}
+            profile={profile}
+            setProfile={setProfile}
+          />
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
